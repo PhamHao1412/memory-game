@@ -14,7 +14,7 @@ const state = {
   totalFlips: 0,
   totalTime: 0,
   loop: null,
-  delay: 1000,
+  delay: 1500,
 };
 
 const pickRandom = (array, item) => {
@@ -44,8 +44,11 @@ const generateGame = () => {
   if (dimensions % 2 !== 0) {
     throw new Error("The dimension of the board must be an even number.");
   }
-  const emojis = ["🥔", "🍒", "🥑", "🌽", "🥕", "🍇", "🍉", "🍌", "🥭", "🍍"];
-  const picks = pickRandom(emojis, (dimensions * dimensions) / 2);
+
+  const emojis = ["🐎", "🐇", "🐬", "🐊", "🦅", "🦩", "🐘", "🦏", "🦍", "🐆"];
+  // const picks = pickRandom(emojis, (dimensions * dimensions) / 2);
+  const picks = pickRandom(emojis, 2);
+
   const items = shuffle([...picks, ...picks]);
   const card = `
               ${items
@@ -102,10 +105,7 @@ const flipCard = (card) => {
 
   if (!document.querySelectorAll(".card:not(.flipped)").length) {
     setTimeout(() => {
-      // selectors.board.innerHTML = "";
       generateGame();
-    }, state.delay);
-    setTimeout(() => {
       selectors.boardContainer.classList.add("flipped");
       selectors.win.innerHTML = `
                 <span class="win-text">
@@ -115,22 +115,19 @@ const flipCard = (card) => {
                              <button class="play-again">Play again</button>
                 </span>`;
       clearInterval(state.loop);
-    }, 1000);
+    }, state.delay);
   }
 };
 
 const playAgain = () => {
   selectors.boardContainer.classList.remove("flipped");
   selectors.start.classList.remove("disabled");
-
-  setTimeout(() => {
-    document.querySelectorAll(".card").forEach((item) => {
-      item.classList.remove("flipped");
-      item.classList.remove("matched");
-      resetControl();
-      clearInterval(state.loop);
-    });
-  }, 300);
+  document.querySelectorAll(".card").forEach((item) => {
+    item.classList.remove("flipped");
+    item.classList.remove("matched");
+    resetControl();
+    clearInterval(state.loop);
+  });
 };
 const attachEventListeners = () => {
   document.addEventListener("click", (e) => {
